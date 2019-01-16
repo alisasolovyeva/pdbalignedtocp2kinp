@@ -1,0 +1,20 @@
+#!/bin/bash
+#SBATCH --job-name=
+#SBATCH --time=10:00:00
+#SBATCH --nodes=18
+#SBATCH --ntasks-per-node=2
+#SBATCH --cpus-per-task=4
+#SBATCH --constraint=mc
+#========================================
+ module load daint-mc
+ module unload PrgEnv-cray
+ module load PrgEnv-gnu/6.0.4
+ module load fftw/3.3.4.10
+ module load CP2K
+ module list
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+ulimit -s unlimited
+
+
+srun -n $SLURM_NTASKS --ntasks-per-node=$SLURM_NTASKS_PER_NODE -c $SLURM_CPUS_PER_TASK cp2k.psmp .inp > .out
+
